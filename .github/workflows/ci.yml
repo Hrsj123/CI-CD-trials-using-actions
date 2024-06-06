@@ -49,8 +49,8 @@ jobs:
         run: pytest .
         shell: bash
 
-      # - name: Analyze code with CodeQL (Security Checks)
-      #   uses: github/codeql-action@v3
-      #   with:
-      #     languages: python
-      #     queries: ./path/to/your/queries.ql    # For custom checks!
+      - name: Analyze code with CodeQL (Security Checks)
+        uses: github/codeql-action@v3
+        with:
+          languages: python
+          # queries: ./path/to/your/queries.ql    # For custom checks!
