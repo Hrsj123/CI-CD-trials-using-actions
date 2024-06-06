@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
         [ main, master ]
-  # workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -49,8 +49,12 @@ jobs:
         run: pytest .
         shell: bash
 
-      - name: Analyze code with CodeQL (Security Checks)
-        uses: github/codeql-action@v3
+      - name: Initialize CodeQL (Security Checks)
+        uses: github/codeql-action/init@v3
         with:
           languages: python
-          # queries: ./path/to/your/queries.ql    # For custom checks!
+          queries: security-and-quality
+
+      - name: Perform CodeQL Analysis
+        id: analyze_codeql
+        uses: github/codeql-action/analyze@v3
