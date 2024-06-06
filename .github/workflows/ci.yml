@@ -23,15 +23,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.9
-      
-      - name: Set up virtual environment and dependencies
-        run: |
-          python -m venv venv
-          pip install -r requirements.txt
-          echo "Environment setup successfull..."
-        shell: bash
-      
-      # # Can be useful to apply this step before installing requirements.txt! 
+          
+      # # Caching the dependencies which are not frequently updated can reduce the worflow runtime! 
       # - name: Cache dependencies
       #   uses: actions/cache@v3
       #   with:
@@ -40,12 +33,25 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-pip-
 
+      - name: Set up virtual environment and dependencies
+        run: |
+          python -m venv venv
+          pip install -r requirements.txt
+          echo "Environment setup successfull..."
+        shell: bash
+
       # # Perform any build steps if required!
       # - name: Build
       #   run: |
       #     ...
       #     ...
       #   shell: bash
+
+      - name: Lint Code
+        run: |
+          pip install flake8
+          flake8 .
+        shell: bash
 
       - name: Test
         run: pytest .
