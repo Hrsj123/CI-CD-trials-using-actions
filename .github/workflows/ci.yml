@@ -1,0 +1,56 @@
+name: Continuous Integration Workflow
+
+on:
+  push:
+    branches:
+        [ main, master ]
+  pull_request:
+    branches:
+        [ main, master ]
+  # workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8.9
+      
+      - name: Set up virtual environment and dependencies
+        run: |
+          python -m venv venv
+          pip install -r requirements.txt
+          echo "Environment setup successfull..."
+        shell: bash
+      
+      # # Can be useful to apply this step before installing requirements.txt! 
+      # - name: Cache dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/pip
+      #     key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-pip-
+
+      # # Perform any build steps if required!
+      # - name: Build
+      #   run: |
+      #     ...
+      #     ...
+      #   shell: bash
+
+      - name: Test
+        run: pytest .
+        shell: bash
+
+      - name: Analyze code with CodeQL (Security Checks)
+        uses: github/codeql-action@v3
+        with:
+          languages: python
+          # queries: ./path/to/your/queries.ql    # For custom checks!
