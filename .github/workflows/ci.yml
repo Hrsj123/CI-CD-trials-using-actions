@@ -11,6 +11,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +53,7 @@ jobs:
 
       - name: Initialize CodeQL (Security Checks)
         uses: github/codeql-action/init@v3
+        id: init_codeql
         with:
           languages: python
           queries: security-and-quality
